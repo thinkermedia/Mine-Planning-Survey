@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mine Planning Survey | Thinker Media Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --white:#FFFFFF;
+    --paper:#F3F7FC;
+    --blue-deep:#0A2E55;
+    --blue:#1D5A9E;
+    --blue-mid:#2E6FB8;
+    --blue-soft:#EAF2FB;
+    --blue-line:#CBDCEE;
+    --ink:#152A44;
+    --muted:#5C7089;
+    --gold:#B8954A;
+    --danger:#B14343;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:radial-gradient(circle at 20% 15%, #FFFFFF 0%, #EAF1FA 55%, #DDE9F6 100%);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  .app{
+    width:100%;
+    max-width:680px;
+  }
+  .brandbar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:18px;
+  }
+  .brand{
+    font-family:'Crimson Text',serif;
+    font-size:15px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+  .brand-large{
+    font-family:'Crimson Text',serif;
+    font-size:20px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--gold);
+    text-align:center;
+    margin-bottom:22px;
+  }
+  .progress-track{
+    height:3px;
+    width:100%;
+    background:var(--blue-line);
+    border-radius:3px;
+    margin-bottom:28px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg,var(--blue-mid),var(--blue-deep));
+    transition:width .35s ease;
+  }
+  .card{
+    background:var(--white);
+    border:1px solid var(--blue-line);
+    border-radius:14px;
+    padding:36px 34px;
+    box-shadow:0 20px 50px rgba(10,46,85,0.1);
+  }
+  .section-eyebrow{
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--blue-mid);
+    font-weight:600;
+    margin-bottom:10px;
+  }
+  .qtext{
+    font-family:'Crimson Text',serif;
+    font-size:23px;
+    line-height:1.4;
+    font-weight:600;
+    color:var(--blue-deep);
+    margin:0 0 6px 0;
+  }
+  .qsub{
+    font-size:12.5px;
+    color:var(--muted);
+    margin-bottom:22px;
+    font-style:italic;
+  }
+  .intro-body{
+    font-size:15px;
+    line-height:1.7;
+    color:var(--ink);
+    margin-bottom:16px;
+  }
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .opt{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:14px 16px;
+    border-radius:9px;
+    border:1px solid var(--blue-line);
+    background:var(--white);
+    cursor:pointer;
+    transition:all .15s ease;
+    font-size:15px;
+    line-height:1.45;
+    color:var(--ink);
+  }
+  .opt:hover{
+    border-color:var(--blue-mid);
+    background:var(--blue-soft);
+  }
+  .opt.selected{
+    border-color:var(--blue);
+    background:var(--blue-soft);
+  }
+  .opt .marker{
+    flex:0 0 auto;
+    width:18px;height:18px;
+    border-radius:4px;
+    border:1.5px solid var(--blue-line);
+    margin-top:2px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .opt.radio .marker{ border-radius:50%; }
+  .opt.selected .marker{ border-color:var(--blue); background:var(--blue); }
+  .opt.selected .marker::after{
+    content:'';
+    width:8px;height:8px;
+    background:var(--white);
+    border-radius:2px;
+  }
+  .opt.radio.selected .marker::after{ border-radius:50%; }
+  .other-input{
+    margin-top:6px;
+    width:100%;
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid var(--blue-line);
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+  }
+  .text-input{
+    width:100%;
+    padding:13px 14px;
+    border-radius:9px;
+    border:1px solid var(--blue-line);
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+  }
+  .grid-wrap{ display:flex; flex-direction:column; gap:20px; }
+  .grid-row-label{ font-size:14.5px; color:var(--blue-deep); margin-bottom:8px; font-weight:600; }
+  .grid-row-sub{ font-size:12.5px; color:var(--muted); margin-bottom:10px; font-weight:400; }
+  .grid-scale{ display:flex; gap:8px; }
+  .grid-col{ flex:1; }
+  .scale-btn{
+    width:100%;
+    padding:10px 4px;
+    border-radius:7px;
+    border:1px solid var(--blue-line);
+    background:var(--white);
+    color:var(--ink);
+    cursor:pointer;
+    font-size:13px;
+    text-align:center;
+  }
+  .scale-btn.selected{ border-color:var(--blue); background:var(--blue-soft); color:var(--blue-deep); font-weight:600; }
+  .scale-legend{ display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:4px; }
+  .grid-col-header{ font-size:13px; color:var(--blue-mid); text-align:center; margin-bottom:6px; font-weight:600; }
+  .grid-cols-wrap{ display:flex; flex-direction:column; gap:26px; overflow-x:auto; }
+
+  /* --- Attribute-paginated provider grid (Q5a) --- */
+  .attr-progress{ font-size:12px; color:var(--muted); margin-bottom:4px; letter-spacing:0.04em; }
+  .provider-table{ display:flex; gap:14px; overflow-x:auto; padding-bottom:4px; }
+  .provider-col{
+    flex:1 1 0;
+    min-width:108px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    background:var(--paper);
+    border:1px solid var(--blue-line);
+    border-radius:10px;
+    padding:14px 10px;
+  }
+  .provider-name{
+    font-size:13px;
+    font-weight:600;
+    color:var(--blue-deep);
+    text-align:center;
+    line-height:1.3;
+    min-height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .provider-scale{ display:flex; flex-direction:column; gap:6px; }
+  .provider-scale-btn{
+    width:100%;
+    padding:9px 4px;
+    border-radius:6px;
+    border:1px solid var(--blue-line);
+    background:var(--white);
+    color:var(--ink);
+    cursor:pointer;
+    font-size:13px;
+    text-align:center;
+  }
+  .provider-scale-btn.selected{ border-color:var(--blue); background:var(--blue-soft); color:var(--blue-deep); font-weight:600; }
+  .provider-scale-legend{ display:flex; justify-content:space-between; font-size:10.5px; color:var(--muted); margin-top:2px; }
+  .nav-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:28px;
+  }
+  .btn{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    padding:12px 26px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .btn-primary{
+    background:linear-gradient(120deg,var(--blue-mid),var(--blue-deep));
+    color:var(--white);
+  }
+  .btn-primary:hover{ filter:brightness(1.08); }
+  .btn-primary:disabled{ opacity:0.35; cursor:not-allowed; filter:none; }
+  .btn-ghost{
+    background:transparent;
+    color:var(--muted);
+    border:1px solid var(--blue-line);
+  }
+  .btn-ghost:hover{ color:var(--blue-deep); border-color:var(--blue-mid); }
+  .error-msg{ color:var(--danger); font-size:13px; margin-top:10px; }
+  .end-screen{ text-align:center; padding:20px 0; }
+  .end-screen h2{ font-family:'Crimson Text',serif; font-size:26px; margin-bottom:12px; color:var(--blue-deep); }
+  .end-screen p{ font-size:15px; color:var(--ink); line-height:1.6; }
+  .footer-note{ text-align:center; font-size:11px; color:var(--muted); margin-top:18px; }
+  @media (max-width:520px){
+    .card{ padding:26px 20px; }
+    .qtext{ font-size:20px; }
+    .grid-scale{ gap:4px; }
+    .scale-btn{ font-size:11px; padding:8px 2px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="brandbar" id="brandbar">
+    <div class="brand">Thinker Media Group</div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="card" id="card"></div>
+  <div class="footer-note">All responses are confidential and reported only in aggregate.</div>
+</div>
+
+<script>
+/* ======================= CONFIG ======================= */
+// Replace with the NEW Apps Script deployment URL for this survey per TMG SOP.
+const SCRIPT_URL = "REPLACE_WITH_APPS_SCRIPT_DEPLOYMENT_URL";
+const params = new URLSearchParams(window.location.search);
+const REF = params.get('ref') || '';
+
+/* ======================= QUESTION BANK ======================= */
+// NOTE: All question/option text below is verbatim from Combined_survey_industry_and_market.docx.
+// Bracketed programming instructions from the source doc (e.g. [DISQUALIFY], [CAP RESPONSES AT 5])
+// are implemented as logic flags below and are not shown to respondents.
+
+const ROLE_OPTIONS = [
+  {v:'a', t:'Mine Manager / Site General Manager'},
+  {v:'b', t:'Group Head of Mine Planning'},
+  {v:'c', t:'Chief Mining Engineer'},
+  {v:'d', t:'VP/Head of Technical Services'},
+  {v:'e', t:'Head of Strategic/Long-Term Planning or Business Planning'},
+  {v:'f', t:'Head of Studies / Projects Director'},
+  {v:'g', t:'Other (please specify)', disqualify:true, hasOther:true}
+];
+
+const SOFTWARE_OPTIONS = [
+  {v:'a', t:'Deswik (Sandvik)'},
+  {v:'b', t:'Maptek Vulcan'},
+  {v:'c', t:'GEOVIA Surpac / Whittle (Dassault Systèmes)'},
+  {v:'d', t:'Datamine (Studio, MineScape, Minemax)'},
+  {v:'e', t:'Micromine (incl. Spry and Alastri)'},
+  {v:'f', t:'Hexagon MinePlan (formerly MineSight)'},
+  {v:'g', t:'RPMGlobal (XPAC, XERAS)'},
+  {v:'h', t:'Seequent Leapfrog (Bentley)'},
+  {v:'i', t:'Other (please specify)', hasOther:true}
+];
+
+const GRID_ATTRIBUTES = [
+  {v:'planning_power', t:'Planning power', sub:'depth of design, scheduling and optimisation capability, including performance on large, complex orebodies'},
+  {v:'ease_of_use', t:'Ease of use', sub:'how quickly planners become productive; intuitiveness of the interface and learning curve'},
+  {v:'integration', t:'Integration & interoperability', sub:'how well it connects with other systems and data (geology, survey, financial, execution) rather than trapping work in silos'},
+  {v:'innovation_ai', t:'Innovation & AI roadmap', sub:"pace of product development and credibility of the vendor's AI/optimisation direction"},
+  {v:'support', t:'Support & after-sales service', sub:'quality and speed of technical support, training, onboarding, and account engagement after the licence is sold'},
+  {v:'value', t:'Value for money', sub:'total cost against benefit delivered, including licensing flexibility and commercial terms'},
+  {v:'adoption', t:'Industry adoption & available talent', sub:'how widely used the platform is, and how easily you can find planners, contractors and consultants who know it'}
+];
+
+const QUESTIONS = [
+  { id:'intro', section:'', type:'intro',
+    title:'Mine Planning Survey',
+    body:[
+      "The decisions that determine whether a mine succeeds are largely made before feasibility – at scoping and prefeasibility, when orebody knowledge is thinnest, disciplines work in silos, and only a handful of scenarios can be tested. New technology, from AI-driven scenario generation to integrated multi-disciplinary study platforms, promises to change that.",
+      "This short survey gathers the views of mine planning and study leaders on where value is really won and lost, what it costs when early-stage risks surface late, and how the next generation of planning should manage uncertainty. Results will be published as an industry report; all responses are anonymous."
+    ]
+  },
+
+  // ---------- SCREENING ----------
+  { id:'S1', section:'Screening questions', type:'single',
+    text:'What is your job title / role?', sub:'(Select one)',
+    options: ROLE_OPTIONS },
+
+  { id:'S2', section:'Screening questions', type:'single',
+    text:'What is your role in the decision-making process to bring on new suppliers?', sub:'(Select one)',
+    options:[
+      {v:'a', t:'Budget holder'},
+      {v:'b', t:'Final decision maker'},
+      {v:'c', t:'Influencer'},
+      {v:'d', t:'Stakeholder, but my view is considered'},
+      {v:'e', t:'Stakeholder, but I am generally not consulted on supplier decisions', disqualify:true},
+      {v:'f', t:"I don't have any role in supplier decisions", disqualify:true}
+    ]},
+
+  { id:'S3', section:'Screening questions', type:'single',
+    text:'How long have you worked in the mining industry?', sub:'(Select one)',
+    options:[
+      {v:'a', t:'<5 years', quotaCheck:'under5'},
+      {v:'b', t:'5-10 years'},
+      {v:'c', t:'10-15 years'},
+      {v:'d', t:'15-25 years'},
+      {v:'e', t:'>25 years'}
+    ]},
+
+  { id:'S4', section:'Screening questions', type:'text',
+    text:'Which country are you primarily based in?', sub:'(Open text)' },
+
+  // ---------- SECTION A ----------
+  { id:'A_Q1', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
+    text:"Q1. In your experience, at which stage are the decisions that MOST determine a mining project's ultimate value locked in?", sub:'(Select one)',
+    options:[
+      {v:'a', t:'Concept / scoping study'},
+      {v:'b', t:'Prefeasibility study (PFS)'},
+      {v:'c', t:'Feasibility study (FS)'},
+      {v:'d', t:'Detailed design and execution planning'},
+      {v:'e', t:'Once in operation, through ongoing replanning'}
+    ]},
+
+  { id:'A_Q2', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'multi',
+    text:'Q2. Which disciplines are regularly brought into early-stage mine planning (defined as concept, scoping and prefeasibility) too late to prevent avoidable mistakes?', sub:'(Select all relevant)',
+    options:[
+      {v:'a', t:'ESG and permitting considerations'},
+      {v:'b', t:'Geotechnical engineering'},
+      {v:'c', t:'Hydrogeology and water management'},
+      {v:'d', t:'Metallurgy and processing'},
+      {v:'e', t:'Tailings storage and waste management'},
+      {v:'f', t:'Mine closure and rehabilitation planning'},
+      {v:'g', t:'Infrastructure, logistics and power'},
+      {v:'h', t:'Financial and market analysis'},
+      {v:'i', t:'None – disciplines are well integrated from the start'}
+    ]},
+
+  { id:'A_Q2a', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
+    text:'Q2a. Which discipline is MOST crucial to bring into early-stage mine planning to prevent avoidable mistakes?', sub:'(Select one)',
+    note:'Programmed as single-select per TMG decision (2026-07-26) — source doc labels this "Select all relevant," to be confirmed with client.',
+    options:[
+      {v:'a', t:'ESG and permitting considerations'},
+      {v:'b', t:'Geotechnical engineering'},
+      {v:'c', t:'Hydrogeology and water management'},
+      {v:'d', t:'Metallurgy and processing'},
+      {v:'e', t:'Tailings storage and waste management'},
+      {v:'f', t:'Mine closure and rehabilitation planning'},
+      {v:'g', t:'Infrastructure, logistics and power'},
+      {v:'h', t:'Financial and market analysis'},
+      {v:'i', t:'None – disciplines are well integrated from the start'}
+    ]},
+
+  { id:'A_Q3', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
+    text:'Q3. When mine plans require material rework later in the project lifecycle, how often does the root cause trace back to a risk that could have been identified at scoping or prefeasibility?', sub:'(Select one)',
+    options:[
+      {v:'a', t:'Rarely – most rework stems from genuinely unforeseeable events'},
+      {v:'b', t:'Sometimes – perhaps 1 in 4 cases'},
+      {v:'c', t:'Often – around half of cases'},
+      {v:'d', t:'Usually – the majority of rework was avoidable with better early-stage work.'}
+    ]},
+
+  { id:'A_Q4', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
+    text:'Q4. When a risk that is insufficiently identified and mitigated at study stage – geotechnical, ESG, water, metallurgical or otherwise – emerges once construction or operations have already commenced, what is the typical financial impact considering both direct reworking costs and delays?', sub:'(Select one)',
+    options:[
+      {v:'a', t:'<US$1 million'},
+      {v:'b', t:'US$1-10 million'},
+      {v:'c', t:'US$10-50 million'},
+      {v:'d', t:'US$50-250 million'},
+      {v:'e', t:'>US$250 million'}
+    ]},
+
+  { id:'A_Q5', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
+    text:'Q5. Which best describes your use of AI and advanced optimisation tools in early-stage study work today?', sub:'(Select one)',
+    options:[
+      {v:'a', t:'Embedded in how we run scoping and prefeasibility studies'},
+      {v:'b', t:'In live pilots on selected studies'},
+      {v:'c', t:'Actively evaluating tools'},
+      {v:'d', t:'Not using yet, but expect to within 12 months'},
+      {v:'e', t:'No plans to use AI in study work'}
+    ]},
+
+  { id:'A_Q6', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'multi',
+    text:'Q6. Where do you expect AI and new planning technology to add value to early-stage mine planning over the next three years?', sub:'(Select all relevant)',
+    options:[
+      {v:'a', t:'Generating and testing far more scenarios in the time a study allows'},
+      {v:'b', t:'More rigorous modelling of uncertainty such as geological confidence, geometallurgical performance and market conditions'},
+      {v:'c', t:'Integrating ESG, geotechnical, water and other disciplines into planning from day one'},
+      {v:'d', t:'Optimising strategy across multiple sites and assets, not just single projects'},
+      {v:'e', t:'Compressing study timelines without loss of rigour'},
+      {v:'f', t:'Automated generation of design options (pit shells, layouts, stope designs)'}
+    ]},
+
+  { id:'A_Q6a', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'multi',
+    text:'Q6a. Where do you expect AI and new planning technology to value to add MOST value to early-stage mine planning over the next three years?', sub:'(Select all relevant)',
+    options:[
+      {v:'a', t:'Generating and testing far more scenarios in the time a study allows'},
+      {v:'b', t:'More rigorous modelling of uncertainty such as geological confidence, geometallurgical performance and market conditions'},
+      {v:'c', t:'Integrating ESG, geotechnical, water and other disciplines into planning from day one'},
+      {v:'d', t:'Optimising strategy across multiple sites and assets, not just single projects'},
+      {v:'e', t:'Compressing study timelines without loss of rigour'},
+      {v:'f', t:'Automated generation of design options (pit shells, layouts, stope designs)'}
+    ]},
+
+  { id:'A_Q7', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'multi',
+    text:'Q7. Most studies still evaluate only a handful of planning scenarios. What materially limits your ability to explore a wider range of options and build flexibility into early-stage plans?', sub:'(Select all relevant)',
+    options:[
+      {v:'a', t:'The time and cost of study work – each extra scenario is expensive'},
+      {v:'b', t:'Software and computational limits'},
+      {v:'c', t:'Availability of specialist people to assess each scenario properly'},
+      {v:'d', t:'Difficulty quantifying the value of flexibility, so it loses out to single-point NPV'},
+      {v:'e', t:'Decision makers and investors prefer a single definitive plan'},
+      {v:'f', t:'Nothing – we already evaluate a wide range of scenarios'}
+    ]},
+
+  { id:'A_Q7a', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
+    text:'Q7a. What MOST limits your ability to explore a wider range of options and build flexibility into early-stage plans?', sub:'(Select one)',
+    options:[
+      {v:'a', t:'The time and cost of study work – each extra scenario is expensive'},
+      {v:'b', t:'Software and computational limits'},
+      {v:'c', t:'Availability of specialist people to assess each scenario properly'},
+      {v:'d', t:'Difficulty quantifying the value of flexibility, so it loses out to single-point NPV'},
+      {v:'e', t:'Decision makers and investors prefer a single definitive plan'},
+      {v:'f', t:'Nothing – we already evaluate a wide range of scenarios'}
+    ]},
+
+  { id:'A_Q8', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
+    text:'Q8. When your organisation plans across more than one site or asset, how would you describe the approach?', sub:'(Select one)',
+    options:[
+      {v:'a', t:'Fully integrated – we optimise the portfolio as a whole, including shared infrastructure, capital sequencing and market exposure'},
+      {v:'b', t:'Partially integrated – sites plan individually but coordinate on shared constraints'},
+      {v:'c', t:'Site-by-site, with results aggregated at corporate level'},
+      {v:'d', t:"Entirely site-by-site – portfolio-level optimisation doesn't happen"},
+      {v:'e', t:'Not applicable – single-asset organisation'}
+    ]},
+
+  { id:'A_Q9', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'multi',
+    text:'Q9. As study-stage planning evolves, where will external advisers add value?', sub:'(Select all relevant)',
+    options:[
+      {v:'a', t:'Independent risk review of scoping and prefeasibility work before decisions are locked in'},
+      {v:'b', t:'Integrating ESG, geotechnical and other disciplines into the planning process early'},
+      {v:'c', t:'Scenario and optionality analysis beyond what in-house teams can resource'},
+      {v:'d', t:'Strategic optimisation across a portfolio of sites and assets'},
+      {v:'e', t:'Bringing AI and advanced planning technology into study workflows'},
+      {v:'f', t:'We expect to need less external support as tools improve'}
+    ]},
+
+  { id:'A_Q9a', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
+    text:'Q9a. As study-stage planning evolves, where will external advisers add MOST value?', sub:'(Select one)',
+    options:[
+      {v:'a', t:'Independent risk review of scoping and prefeasibility work before decisions are locked in'},
+      {v:'b', t:'Integrating ESG, geotechnical and other disciplines into the planning process early'},
+      {v:'c', t:'Scenario and optionality analysis beyond what in-house teams can resource'},
+      {v:'d', t:'Strategic optimisation across a portfolio of sites and assets'},
+      {v:'e', t:'Bringing AI and advanced planning technology into study workflows'},
+      {v:'f', t:'We expect to need less external support as tools improve'}
+    ]},
+
+  // ---------- SECTION B ----------
+  { id:'B_Q1', section:'Section B', sectionDesc:'The mine planning market', type:'single',
+    text:"Q1. How do you expect your organisation's total spend on mine planning software and related services to change over the next 24 months?", sub:'(Select one)',
+    options:[
+      {v:'a', t:'Increase by more than 25%'},
+      {v:'b', t:'Increase by up to 25%'},
+      {v:'c', t:'Stay about the same'},
+      {v:'d', t:'Decrease'},
+      {v:'e', t:"Don't know"}
+    ]},
+
+  { id:'B_Q2', section:'Section B', sectionDesc:'The mine planning market', type:'single',
+    text:"Q2. Roughly what is your organisation's current annual spend on mine planning software and related services (licences, support, training, consulting)?", sub:'(Select one)',
+    options:[
+      {v:'a', t:'<US$100,000'},
+      {v:'b', t:'US$100,000-500,000'},
+      {v:'c', t:'US$500,000-1 million'},
+      {v:'d', t:'US$1 million-5 million'},
+      {v:'e', t:'>US$5 million'}
+    ]},
+
+  { id:'B_Q3', section:'Section B', sectionDesc:'The mine planning market', type:'multi',
+    text:'Q3. Which areas of your mine-planning infrastructure are you expecting to invest in over the next 24 months?', sub:'(Select all relevant)',
+    options:[
+      {v:'a', t:'AI and optimisation capability'},
+      {v:'b', t:'Integration and interoperability between systems'},
+      {v:'c', t:'Cloud migration / collaborative planning platforms'},
+      {v:'d', t:'Data quality and orebody knowledge'},
+      {v:'e', t:'Training and upskilling planners'},
+      {v:'f', t:'External consulting and advisory support'},
+      {v:'g', t:'Additional licences or seats of current tools'},
+      {v:'h', t:'Replacing our core planning platform'}
+    ]},
+
+  { id:'B_Q3a', section:'Section B', sectionDesc:'The mine planning market', type:'single',
+    text:'Q3a. Which area of your mine-planning infrastructure represents the GREATEST priority for investment?', sub:'(Select one)',
+    options:[
+      {v:'a', t:'AI and optimisation capability'},
+      {v:'b', t:'Integration and interoperability between systems'},
+      {v:'c', t:'Cloud migration / collaborative planning platforms'},
+      {v:'d', t:'Data quality and orebody knowledge'},
+      {v:'e', t:'Training and upskilling planners'},
+      {v:'f', t:'External consulting and advisory support'},
+      {v:'g', t:'Additional licences or seats of current tools'},
+      {v:'h', t:'Replacing our core planning platform'}
+    ]},
+
+  { id:'B_Q4', section:'Section B', sectionDesc:'The mine planning market', type:'multi',
+    text:'Q4. Where is new technology materially changing the way your mine planning budget is allocated?', sub:'(Select all relevant)',
+    options:[
+      {v:'a', t:'Shifting from perpetual licences to subscription / SaaS models'},
+      {v:'b', t:'Shifting from software spend towards services and advisory'},
+      {v:'c', t:'Shifting from headcount towards technology'},
+      {v:'d', t:'Consolidating spend with fewer vendors'},
+      {v:'e', t:'Increasing spend on data and integration rather than planning tools themselves'},
+      {v:'f', t:'No significant change in how budget is allocated'}
+    ]},
+
+  { id:'B_Q4a', section:'Section B', sectionDesc:'The mine planning market', type:'multi',
+    text:'Q4a. Where is new technology materially changing the way your mine planning budget is allocated?', sub:'(Select all relevant)',
+    note:'Shown only when "f) No significant change" was NOT selected in Q4, per TMG decision (2026-07-26).',
+    skipIf: (a)=> (a.B_Q4||[]).includes('f'),
+    options:[
+      {v:'a', t:'Shifting from perpetual licences to subscription / SaaS models'},
+      {v:'b', t:'Shifting from software spend towards services and advisory'},
+      {v:'c', t:'Shifting from headcount towards technology'},
+      {v:'d', t:'Consolidating spend with fewer vendors'},
+      {v:'e', t:'Increasing spend on data and integration rather than planning tools themselves'}
+    ]},
+
+  { id:'B_Q5', section:'Section B', sectionDesc:'The mine planning market', type:'multi',
+    text:'Q5. Which mine planning software are you familiar with?', sub:'(Select all relevant)',
+    options: SOFTWARE_OPTIONS },
+
+  { id:'B_Q5a', section:'Section B', sectionDesc:'The mine planning market', type:'grid',
+    text:'Q5a. For with which you are familiar, how are they perceived against the following characteristics?', sub:'(Rating grid, 1 = Poor to 5 = Excellent)',
+    scaleLabels:{low:'1 = Poor', high:'5 = Excellent'},
+    rows: GRID_ATTRIBUTES,
+    pipeFrom:'B_Q5' },
+
+  { id:'B_Q5c', section:'Section B', sectionDesc:'The mine planning market', type:'single',
+    text:'Q5c. Which is your primary mine planning software provider?', sub:'(Select one)',
+    pipeFrom:'B_Q5' },
+
+  { id:'B_Q5d', section:'Section B', sectionDesc:'The mine planning market', type:'single',
+    text:'Q5d. Overall, how satisfied are you with your primary mine planning software provider?', sub:'(Select one)',
+    options:[
+      {v:'a', t:'Very satisfied'},
+      {v:'b', t:'Fairly satisfied'},
+      {v:'c', t:'Neither satisfied nor dissatisfied'},
+      {v:'d', t:'Fairly dissatisfied'},
+      {v:'e', t:'Very dissatisfied'}
+    ]},
+
+  { id:'B_Q6', section:'Section B', sectionDesc:'The mine planning market', type:'multi',
+    text:'Q6. Considering the broader mine planning landscape (not just your supplier), what material frustrations do you have with planning solutions themselves?', sub:'(Select all relevant)',
+    options:[
+      {v:'a', t:'Poor interoperability with other systems'},
+      {v:'b', t:'Outdated user experience and steep learning curve'},
+      {v:'c', t:'AI and optimisation capability lagging behind the marketing'},
+      {v:'d', t:'Performance with large or complex datasets'},
+      {v:'e', t:'Rigid licensing models and rising costs'},
+      {v:'f', t:'Slow pace of product development'},
+      {v:'g', t:'No significant frustrations'}
+    ]},
+
+  { id:'B_Q6a', section:'Section B', sectionDesc:'The mine planning market', type:'single',
+    text:'Q6a. What is your GREATEST frustration with the planning solutions themselves?', sub:'(Select one)',
+    skipIf: (a)=> (a.B_Q6||[]).includes('g'),
+    options:[
+      {v:'a', t:'Poor interoperability with other systems'},
+      {v:'b', t:'Outdated user experience and steep learning curve'},
+      {v:'c', t:'AI and optimisation capability lagging behind the marketing'},
+      {v:'d', t:'Performance with large or complex datasets'},
+      {v:'e', t:'Rigid licensing models and rising costs'},
+      {v:'f', t:'Slow pace of product development'}
+    ]},
+
+  { id:'B_Q7', section:'Section B', sectionDesc:'The mine planning market', type:'multi',
+    text:"Q7. Considering the broader mine planning landscape (not just your supplier), what material frustrations are prevalent within providers' service, support and communication?", sub:'(Select all relevant)',
+    options:[
+      {v:'a', t:'Slow or low-quality technical support'},
+      {v:'b', t:'Weak after-sales engagement — little contact once the licence is sold'},
+      {v:'c', t:'Support staff who lack real mining and planning expertise'},
+      {v:'d', t:'Poor training and onboarding'},
+      {v:'e', t:'Poor communication of product roadmap and changes'},
+      {v:'f', t:'Inflexible commercial terms and account management'},
+      {v:'g', t:'No significant frustrations'}
+    ]},
+
+  { id:'B_Q7a', section:'Section B', sectionDesc:'The mine planning market', type:'single',
+    text:"Q7a. What is your GREATEST frustration with providers' service, support and communication?", sub:'(Select one)',
+    skipIf: (a)=> (a.B_Q7||[]).includes('g'),
+    options:[
+      {v:'a', t:'Slow or low-quality technical support'},
+      {v:'b', t:'Weak after-sales engagement — little contact once the licence is sold'},
+      {v:'c', t:'Support staff who lack real mining and planning expertise'},
+      {v:'d', t:'Poor training and onboarding'},
+      {v:'e', t:'Poor communication of product roadmap and changes'},
+      {v:'f', t:'Inflexible commercial terms and account management'}
+    ]},
+
+  { id:'B_Q8', section:'Section B', sectionDesc:'The mine planning market', type:'single',
+    text:'Q8. Who has the greatest influence over decisions to purchase mine planning technology and services in your organisation?', sub:'(Select one)',
+    options:[
+      {v:'a', t:'Head of mine planning / technical services'},
+      {v:'b', t:'Site general manager or operations leadership'},
+      {v:'c', t:'Group / corporate technology function'},
+      {v:'d', t:'Procurement'},
+      {v:'e', t:'C-suite or board'}
+    ]},
+
+  { id:'B_Q9', section:'Section B', sectionDesc:'The mine planning market', type:'single',
+    text:'Q9. How likely is your organisation to change its primary planning software provider, or bring in new providers, within the next 24 months?', sub:'(Select one)',
+    options:[
+      {v:'a', t:'Actively looking at alternatives now'},
+      {v:'b', t:'Open to change if a compelling option emerged'},
+      {v:'c', t:'Unlikely — switching costs are too high'},
+      {v:'d', t:'Effectively locked in to our current provider'}
+    ]},
+
+  { id:'thankyou', section:'', type:'end' }
+];
+
+/* ======================= STATE ======================= */
+let answers = {};
+let otherText = {}; // keyed by question id -> other text
+let current = 0;
+let gridSubIndex = 0; // which attribute row we're on, for the paginated Q5a grid
+let terminated = false;
+let terminateReason = '';
+
+function escapeHtml(str){
+  if (str===undefined || str===null) return '';
+  return String(str)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#39;');
+}
+
+function visibleQuestions(){
+  return QUESTIONS.filter(q=>{
+    if (q.skipIf && q.skipIf(answers)) return false;
+    return true;
+  });
+}
+
+function pipedOptions(sourceId){
+  const sel = answers[sourceId] || [];
+  const srcQ = QUESTIONS.find(q=>q.id===sourceId);
+  return sel.map(v=>{
+    if (v === 'i' && otherText[sourceId]) return {v:'i', t:otherText[sourceId]};
+    const o = srcQ.options.find(o=>o.v===v);
+    return o;
+  }).filter(Boolean);
+}
+
+/* ======================= RENDER ======================= */
+const card = document.getElementById('card');
+const progressFill = document.getElementById('progressFill');
+const brandbar = document.getElementById('brandbar');
+const progressTrack = document.querySelector('.progress-track');
+
+function updateProgress(){
+  const q = QUESTIONS[current];
+  const isBookend = (q.type==='intro' || q.type==='end');
+  brandbar.style.display = isBookend ? 'flex' : 'none';
+  progressTrack.style.display = isBookend ? 'none' : 'block';
+  if (isBookend) return;
+  const vis = visibleQuestions();
+  const idx = vis.findIndex(x=>x.id===q.id);
+  const pct = Math.round(((idx+1)/vis.length)*100);
+  progressFill.style.width = pct+'%';
+}
+
+function render(){
+  const q = QUESTIONS[current];
+  updateProgress();
+
+  if (q.type==='intro'){
+    card.innerHTML = `
+      <div class="section-eyebrow">Survey introduction</div>
+      <h1 class="qtext" style="font-size:27px;">${escapeHtml(q.title)}</h1>
+      ${q.body.map(p=>`<div class="intro-body">${escapeHtml(p)}</div>`).join('')}
+      <div class="nav-row" style="justify-content:flex-end;">
+        <button class="btn btn-primary" onclick="goNext()">Begin survey</button>
+      </div>`;
+    return;
+  }
+
+  if (q.type==='end'){
+    card.innerHTML = `
+      <div class="end-screen">
+        <h2>Thank you for your time</h2>
+        <p>Your responses have been recorded and will feed directly into our upcoming industry report on mine planning. We appreciate you sharing your perspective — it genuinely helps sharpen the findings.</p>
+      </div>`;
+    return;
+  }
+
+  let html = `<div class="section-eyebrow">${escapeHtml(q.section)}${q.sectionDesc? ' — '+escapeHtml(q.sectionDesc):''}</div>`;
+  html += `<div class="qtext">${escapeHtml(q.text)}</div>`;
+  html += `<div class="qsub">${escapeHtml(q.sub||'')}</div>`;
+
+  if (q.type==='text'){
+    html += `<input type="text" class="text-input" id="freeText" placeholder="Type your answer" value="${escapeHtml(answers[q.id]||'')}"/>`;
+  }
+  else if (q.type==='single' || q.type==='multi'){
+    let opts = q.options;
+    if (q.pipeFrom) opts = pipedOptions(q.pipeFrom);
+    const selected = answers[q.id] || (q.type==='multi'? [] : null);
+    html += `<div class="options">`;
+    opts.forEach(o=>{
+      const isSel = q.type==='multi' ? (selected||[]).includes(o.v) : selected===o.v;
+      html += `<div class="opt ${q.type==='single'?'radio':''} ${isSel?'selected':''}" onclick="selectOption('${q.id}','${o.v}')">
+        <div class="marker"></div>
+        <div style="flex:1;">${escapeHtml(o.t)}${o.hasOther && isSel ? `<div><input type="text" class="other-input" id="otherInput_${q.id}" placeholder="Please specify" value="${escapeHtml(otherText[q.id]||'')}" onclick="event.stopPropagation()" oninput="otherText['${q.id}']=this.value"/></div>`:''}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  else if (q.type==='grid'){
+    // Attribute-paginated: one row (attribute) per screen, providers laid out as columns.
+    const cols = pipedOptions(q.pipeFrom);
+    const gridAns = answers[q.id] || {};
+    const row = q.rows[gridSubIndex];
+    html += `<div class="attr-progress">Attribute ${gridSubIndex+1} of ${q.rows.length}</div>`;
+    html += `<div class="grid-row-label" style="font-size:17px;">${escapeHtml(row.t)}</div>`;
+    html += `<div class="grid-row-sub" style="margin-bottom:16px;">${escapeHtml(row.sub)}</div>`;
+    html += `<div class="provider-table">`;
+    cols.forEach(col=>{
+      html += `<div class="provider-col"><div class="provider-name">${escapeHtml(col.t)}</div><div class="provider-scale">`;
+      for(let s=1;s<=5;s++){
+        const key = row.v+'|'+col.v;
+        const isSel = gridAns[key]===s;
+        html += `<div class="provider-scale-btn ${isSel?'selected':''}" onclick="selectGrid('${q.id}','${row.v}','${col.v}',${s})">${s}</div>`;
+      }
+      html += `</div></div>`;
+    });
+    html += `</div>`;
+    html += `<div class="provider-scale-legend"><span>${escapeHtml(q.scaleLabels.low)}</span><span>${escapeHtml(q.scaleLabels.high)}</span></div>`;
+  }
+
+  html += `<div class="error-msg" id="errMsg"></div>`;
+  const showBack = !(current<=1 && gridSubIndex===0);
+  html += `<div class="nav-row">
+      <button class="btn btn-ghost" onclick="goBack()" ${showBack?'':'style="visibility:hidden"'}>Back</button>
+      <button class="btn btn-primary" onclick="goNext()">Continue</button>
+    </div>`;
+
+  card.innerHTML = html;
+}
+
+function selectOption(qid, val){
+  const q = QUESTIONS.find(x=>x.id===qid);
+  if (q.type==='multi'){
+    if(!answers[qid]) answers[qid]=[];
+    const arr = answers[qid];
+    const i = arr.indexOf(val);
+    if (i>-1) arr.splice(i,1); else arr.push(val);
+  } else {
+    answers[qid]=val;
+  }
+  render();
+}
+
+function selectGrid(qid,row,col,score){
+  if(!answers[qid]) answers[qid]={};
+  answers[qid][row+'|'+col]=score;
+  render();
+}
+
+/* ======================= VALIDATION & FLOW ======================= */
+function currentAnswerValid(q){
+  if (q.type==='intro' || q.type==='end') return true;
+  if (q.type==='text') {
+    const val = document.getElementById('freeText').value.trim();
+    if(!val) return false;
+    answers[q.id]=val;
+    return true;
+  }
+  if (q.type==='single'){
+    if(!answers[q.id]) return false;
+    const opts = q.pipeFrom ? pipedOptions(q.pipeFrom) : q.options;
+    const o = opts.find(o=>o.v===answers[q.id]);
+    if (o && o.hasOther && !(otherText[q.id]||'').trim()) return false;
+    return true;
+  }
+  if (q.type==='multi'){
+    if(!answers[q.id] || answers[q.id].length===0) return false;
+    const opts = q.options;
+    const hasOtherSelected = answers[q.id].some(v=>{
+      const o = opts.find(o=>o.v===v); return o && o.hasOther;
+    });
+    if (hasOtherSelected){
+      if(!(otherText[q.id]||'').trim()) return false;
+    }
+    return true;
+  }
+  if (q.type==='grid'){
+    // Only validate the attribute row currently on screen
+    const cols = pipedOptions(q.pipeFrom);
+    const row = q.rows[gridSubIndex];
+    const ans = answers[q.id]||{};
+    for(const col of cols){
+      if(!ans[row.v+'|'+col.v]) return false;
+    }
+    return true;
+  }
+  return true;
+}
+
+function terminate(reason){
+  terminated = true;
+  terminateReason = reason;
+  brandbar.style.display = 'flex';
+  progressTrack.style.display = 'none';
+  card.innerHTML = `
+    <div class="end-screen">
+      <h2>Thank you for your time</h2>
+      <p>At this time, you don't qualify for this particular survey. We're genuinely grateful you gave it a go, and we hope there's a fit for your perspective in a future study.</p>
+    </div>`;
+  lockThisRef();
+  submitData('Disqualified', reason);
+}
+
+function checkDisqualifiers(q){
+  if (q.type==='single' && q.options){
+    const o = q.options.find(o=>o.v===answers[q.id]);
+    if (o && o.disqualify) return `Disqualified at ${q.id}: ${o.t}`;
+  }
+  return null;
+}
+
+async function checkQuota(q){
+  if (q.type!=='single') return null;
+  const o = (q.options||[]).find(o=>o.v===answers[q.id]);
+  if (o && o.quotaCheck==='under5'){
+    try{
+      const res = await fetch(SCRIPT_URL+'?action=checkUnder5');
+      const data = await res.json();
+      if (data.quotaFull) return 'Over quota: <5 years experience (cap reached)';
+    }catch(e){ /* fail open if backend unreachable */ }
+  }
+  return null;
+}
+
+async function goNext(){
+  const q = QUESTIONS[current];
+  document.getElementById('errMsg') && (document.getElementById('errMsg').textContent='');
+
+  if (q.type!=='intro' && q.type!=='end'){
+    if(!currentAnswerValid(q)){
+      const err = document.getElementById('errMsg');
+      if (err) err.textContent = 'Please answer before continuing.';
+      return;
+    }
+    const dqReason = checkDisqualifiers(q);
+    if (dqReason){ terminate(dqReason); return; }
+
+    const quotaReason = await checkQuota(q);
+    if (quotaReason){ terminate(quotaReason); return; }
+  }
+
+  // Paginated grid: advance through attribute rows before moving to the next real question
+  if (q.type==='grid' && gridSubIndex < q.rows.length-1){
+    gridSubIndex++;
+    render();
+    return;
+  }
+  gridSubIndex = 0;
+
+  // advance, honoring skip logic
+  let next = current+1;
+  while(next < QUESTIONS.length){
+    const nq = QUESTIONS[next];
+    if (nq.skipIf && nq.skipIf(answers)){ next++; continue; }
+    break;
+  }
+  current = next;
+
+  if (QUESTIONS[current].type==='end'){
+    lockThisRef();
+    submitData('Complete');
+  }
+  render();
+}
+
+function goBack(){
+  const q = QUESTIONS[current];
+  if (q.type==='grid' && gridSubIndex > 0){
+    gridSubIndex--;
+    render();
+    return;
+  }
+  let prev = current-1;
+  while(prev>0){
+    const pq = QUESTIONS[prev];
+    if (pq.skipIf && pq.skipIf(answers)){ prev--; continue; }
+    break;
+  }
+  current = prev;
+  if (QUESTIONS[current].type==='grid'){
+    gridSubIndex = QUESTIONS[current].rows.length-1;
+  }
+  render();
+}
+
+function flattenAnswersForSubmit(){
+  const out = {};
+  QUESTIONS.forEach(q=>{
+    if (!(q.id in answers)) return;
+    if (q.type==='multi'){
+      out[q.id] = answers[q.id].join('|');
+      if (otherText[q.id]) out[q.id+'_Other'] = otherText[q.id];
+    } else if (q.type==='grid'){
+      out[q.id+'_Grid'] = answers[q.id];
+    } else {
+      out[q.id] = answers[q.id];
+      if (otherText[q.id]) out[q.id+'_Other'] = otherText[q.id];
+    }
+  });
+  return out;
+}
+
+function submitData(status, reason){
+  const payload = {
+    status: status,
+    reason: reason||'',
+    ref: REF,
+    lastQuestion: QUESTIONS[current].id,
+    answers: flattenAnswersForSubmit()
+  };
+  try{
+    fetch(SCRIPT_URL, {
+      method:'POST',
+      body: JSON.stringify(payload)
+    });
+  }catch(e){ /* non-blocking */ }
+}
+
+/* ======================= ONE-TIME-USE LINK LOCK ======================= */
+// Each respondent link (?ref=) should only be usable once. A local flag blocks
+// instant replay in the same browser; the server-side check (Code.gs "UsedRefs"
+// sheet) blocks reopening from a different browser/device once a terminal
+// outcome (Complete or Disqualified/OverQuota) has been recorded.
+function localLockKey(){ return 'mps_used_' + REF; }
+
+function lockThisRef(){
+  if (!REF) return;
+  try{ localStorage.setItem(localLockKey(), '1'); }catch(e){ /* ignore */ }
+}
+
+function showAlreadyUsedScreen(){
+  brandbar.style.display = 'flex';
+  progressTrack.style.display = 'none';
+  card.innerHTML = `
+    <div class="end-screen">
+      <h2>This link has already been used</h2>
+      <p>Our records show this survey link has already been completed. Each link is unique to one respondent, so it can only be submitted once. If you believe this is a mistake, please get in touch with the team that sent you this link.</p>
+    </div>`;
+}
+
+async function isLinkAlreadyUsed(){
+  if (!REF) return false;
+  try{
+    if (localStorage.getItem(localLockKey()) === '1') return true;
+  }catch(e){ /* ignore */ }
+  try{
+    const res = await fetch(SCRIPT_URL+'?action=checkLock&ref='+encodeURIComponent(REF));
+    const data = await res.json();
+    if (data.locked){ lockThisRef(); return true; }
+  }catch(e){ /* fail open if backend unreachable */ }
+  return false;
+}
+
+async function init(){
+  const used = await isLinkAlreadyUsed();
+  if (used){ showAlreadyUsedScreen(); return; }
+  // Register a start on page load
+  try{ fetch(SCRIPT_URL+'?action=start'); }catch(e){}
+  render();
+}
+
+init();
+</script>
+</body>
+</html>
