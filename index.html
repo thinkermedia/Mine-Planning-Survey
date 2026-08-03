@@ -285,7 +285,7 @@
 <script>
 /* ======================= CONFIG ======================= */
 // Replace with the NEW Apps Script deployment URL for this survey per TMG SOP.
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyA3j0jk66p2zNVjYJN2jE-bL_TQv6DUwSu9ZX2WPI3H5OEf0JB9aIrYbnuiRnq8JsA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyxw7m3PId7QDu3_h9j0p5DWrAybUEBjvXrnfQubZrKRZvrt2FptC3eOVFa96lkIWsy/exec";
 const params = new URLSearchParams(window.location.search);
 const REF = params.get('ref') || '';
 
@@ -301,7 +301,10 @@ const ROLE_OPTIONS = [
   {v:'d', t:'VP/Head of Technical Services'},
   {v:'e', t:'Head of Strategic/Long-Term Planning or Business Planning'},
   {v:'f', t:'Head of Studies / Projects Director'},
-  {v:'g', t:'Other (please specify)', disqualify:true, hasOther:true}
+  {v:'g', t:'ESG/Sustainability manager', disqualify:true},
+  {v:'h', t:'Chief Information Officer', disqualify:true},
+  {v:'i', t:'Head of infrastructure planning', disqualify:true},
+  {v:'j', t:'Other (please specify)', disqualify:true, hasOther:true}
 ];
 
 const SOFTWARE_OPTIONS = [
@@ -361,8 +364,15 @@ const QUESTIONS = [
       {v:'e', t:'>25 years'}
     ]},
 
-  { id:'S4', section:'Screening questions', type:'text',
-    text:'Which country are you primarily based in?', sub:'(Open text)' },
+  { id:'S4', section:'Screening questions', type:'single',
+    text:'Which region are you primarily based in?', sub:'(Select one)',
+    options:[
+      {v:'a', t:'Americas', quotaCheck:'region'},
+      {v:'b', t:'Australia', quotaCheck:'region'},
+      {v:'c', t:'Africa', quotaCheck:'region'},
+      {v:'d', t:'Europe', quotaCheck:'region'},
+      {v:'e', t:'Asia / Other', quotaCheck:'region'}
+    ]},
 
   // ---------- SECTION A ----------
   { id:'A_Q1', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
@@ -386,23 +396,15 @@ const QUESTIONS = [
       {v:'f', t:'Mine closure and rehabilitation planning'},
       {v:'g', t:'Infrastructure, logistics and power'},
       {v:'h', t:'Financial and market analysis'},
-      {v:'i', t:'None – disciplines are well integrated from the start'}
+      {v:'i', t:'None – disciplines are well integrated from the start', exclusive:true}
     ]},
 
   { id:'A_Q2a', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
     text:'Q2a. Which discipline is MOST crucial to bring into early-stage mine planning to prevent avoidable mistakes?', sub:'(Select one)',
     note:'Programmed as single-select per TMG decision (2026-07-26) — source doc labels this "Select all relevant," to be confirmed with client.',
-    options:[
-      {v:'a', t:'ESG and permitting considerations'},
-      {v:'b', t:'Geotechnical engineering'},
-      {v:'c', t:'Hydrogeology and water management'},
-      {v:'d', t:'Metallurgy and processing'},
-      {v:'e', t:'Tailings storage and waste management'},
-      {v:'f', t:'Mine closure and rehabilitation planning'},
-      {v:'g', t:'Infrastructure, logistics and power'},
-      {v:'h', t:'Financial and market analysis'},
-      {v:'i', t:'None – disciplines are well integrated from the start'}
-    ]},
+    pipeFrom:'A_Q2',
+    skipIf: (a)=> (a.A_Q2||[]).includes('i')
+    },
 
   { id:'A_Q3', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
     text:'Q3. When mine plans require material rework later in the project lifecycle, how often does the root cause trace back to a risk that could have been identified at scoping or prefeasibility?', sub:'(Select one)',
@@ -444,16 +446,11 @@ const QUESTIONS = [
       {v:'f', t:'Automated generation of design options (pit shells, layouts, stope designs)'}
     ]},
 
-  { id:'A_Q6a', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'multi',
-    text:'Q6a. Where do you expect AI and new planning technology to value to add MOST value to early-stage mine planning over the next three years?', sub:'(Select all relevant)',
-    options:[
-      {v:'a', t:'Generating and testing far more scenarios in the time a study allows'},
-      {v:'b', t:'More rigorous modelling of uncertainty such as geological confidence, geometallurgical performance and market conditions'},
-      {v:'c', t:'Integrating ESG, geotechnical, water and other disciplines into planning from day one'},
-      {v:'d', t:'Optimising strategy across multiple sites and assets, not just single projects'},
-      {v:'e', t:'Compressing study timelines without loss of rigour'},
-      {v:'f', t:'Automated generation of design options (pit shells, layouts, stope designs)'}
-    ]},
+  { id:'A_Q6a', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
+    text:'Q6a. Where do you expect AI and new planning technology to value to add MOST value to early-stage mine planning over the next three years?', sub:'(Select one)',
+    note:'Changed to single-select per client feedback (2026-07-26) — source doc labeled this "Select all relevant."',
+    pipeFrom:'A_Q6'
+    },
 
   { id:'A_Q7', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'multi',
     text:'Q7. Most studies still evaluate only a handful of planning scenarios. What materially limits your ability to explore a wider range of options and build flexibility into early-stage plans?', sub:'(Select all relevant)',
@@ -463,19 +460,14 @@ const QUESTIONS = [
       {v:'c', t:'Availability of specialist people to assess each scenario properly'},
       {v:'d', t:'Difficulty quantifying the value of flexibility, so it loses out to single-point NPV'},
       {v:'e', t:'Decision makers and investors prefer a single definitive plan'},
-      {v:'f', t:'Nothing – we already evaluate a wide range of scenarios'}
+      {v:'f', t:'Nothing – we already evaluate a wide range of scenarios', exclusive:true}
     ]},
 
   { id:'A_Q7a', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
     text:'Q7a. What MOST limits your ability to explore a wider range of options and build flexibility into early-stage plans?', sub:'(Select one)',
-    options:[
-      {v:'a', t:'The time and cost of study work – each extra scenario is expensive'},
-      {v:'b', t:'Software and computational limits'},
-      {v:'c', t:'Availability of specialist people to assess each scenario properly'},
-      {v:'d', t:'Difficulty quantifying the value of flexibility, so it loses out to single-point NPV'},
-      {v:'e', t:'Decision makers and investors prefer a single definitive plan'},
-      {v:'f', t:'Nothing – we already evaluate a wide range of scenarios'}
-    ]},
+    pipeFrom:'A_Q7',
+    skipIf: (a)=> (a.A_Q7||[]).includes('f')
+    },
 
   { id:'A_Q8', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
     text:'Q8. When your organisation plans across more than one site or asset, how would you describe the approach?', sub:'(Select one)',
@@ -495,19 +487,14 @@ const QUESTIONS = [
       {v:'c', t:'Scenario and optionality analysis beyond what in-house teams can resource'},
       {v:'d', t:'Strategic optimisation across a portfolio of sites and assets'},
       {v:'e', t:'Bringing AI and advanced planning technology into study workflows'},
-      {v:'f', t:'We expect to need less external support as tools improve'}
+      {v:'f', t:'We expect to need less external support as tools improve', exclusive:true}
     ]},
 
   { id:'A_Q9a', section:'Section A', sectionDesc:'Trends and opportunities for mine planning improvement', type:'single',
     text:'Q9a. As study-stage planning evolves, where will external advisers add MOST value?', sub:'(Select one)',
-    options:[
-      {v:'a', t:'Independent risk review of scoping and prefeasibility work before decisions are locked in'},
-      {v:'b', t:'Integrating ESG, geotechnical and other disciplines into the planning process early'},
-      {v:'c', t:'Scenario and optionality analysis beyond what in-house teams can resource'},
-      {v:'d', t:'Strategic optimisation across a portfolio of sites and assets'},
-      {v:'e', t:'Bringing AI and advanced planning technology into study workflows'},
-      {v:'f', t:'We expect to need less external support as tools improve'}
-    ]},
+    pipeFrom:'A_Q9',
+    skipIf: (a)=> (a.A_Q9||[]).includes('f')
+    },
 
   // ---------- SECTION B ----------
   { id:'B_Q1', section:'Section B', sectionDesc:'The mine planning market', type:'single',
@@ -516,8 +503,7 @@ const QUESTIONS = [
       {v:'a', t:'Increase by more than 25%'},
       {v:'b', t:'Increase by up to 25%'},
       {v:'c', t:'Stay about the same'},
-      {v:'d', t:'Decrease'},
-      {v:'e', t:"Don't know"}
+      {v:'d', t:'Decrease'}
     ]},
 
   { id:'B_Q2', section:'Section B', sectionDesc:'The mine planning market', type:'single',
@@ -545,16 +531,8 @@ const QUESTIONS = [
 
   { id:'B_Q3a', section:'Section B', sectionDesc:'The mine planning market', type:'single',
     text:'Q3a. Which area of your mine-planning infrastructure represents the GREATEST priority for investment?', sub:'(Select one)',
-    options:[
-      {v:'a', t:'AI and optimisation capability'},
-      {v:'b', t:'Integration and interoperability between systems'},
-      {v:'c', t:'Cloud migration / collaborative planning platforms'},
-      {v:'d', t:'Data quality and orebody knowledge'},
-      {v:'e', t:'Training and upskilling planners'},
-      {v:'f', t:'External consulting and advisory support'},
-      {v:'g', t:'Additional licences or seats of current tools'},
-      {v:'h', t:'Replacing our core planning platform'}
-    ]},
+    pipeFrom:'B_Q3'
+    },
 
   { id:'B_Q4', section:'Section B', sectionDesc:'The mine planning market', type:'multi',
     text:'Q4. Where is new technology materially changing the way your mine planning budget is allocated?', sub:'(Select all relevant)',
@@ -564,20 +542,15 @@ const QUESTIONS = [
       {v:'c', t:'Shifting from headcount towards technology'},
       {v:'d', t:'Consolidating spend with fewer vendors'},
       {v:'e', t:'Increasing spend on data and integration rather than planning tools themselves'},
-      {v:'f', t:'No significant change in how budget is allocated'}
+      {v:'f', t:'No significant change in how budget is allocated', exclusive:true}
     ]},
 
-  { id:'B_Q4a', section:'Section B', sectionDesc:'The mine planning market', type:'multi',
-    text:'Q4a. Where is new technology materially changing the way your mine planning budget is allocated?', sub:'(Select all relevant)',
-    note:'Shown only when "f) No significant change" was NOT selected in Q4, per TMG decision (2026-07-26).',
-    skipIf: (a)=> (a.B_Q4||[]).includes('f'),
-    options:[
-      {v:'a', t:'Shifting from perpetual licences to subscription / SaaS models'},
-      {v:'b', t:'Shifting from software spend towards services and advisory'},
-      {v:'c', t:'Shifting from headcount towards technology'},
-      {v:'d', t:'Consolidating spend with fewer vendors'},
-      {v:'e', t:'Increasing spend on data and integration rather than planning tools themselves'}
-    ]},
+  { id:'B_Q4a', section:'Section B', sectionDesc:'The mine planning market', type:'single',
+    text:'Q4a. Which is the MOST significant way new technology is changing your mine planning budget allocation?', sub:'(Select one)',
+    note:'Reworded to ask for the single MOST significant change, per client feedback (2026-07-26) — source doc repeated Q4\'s wording verbatim as multi-select.',
+    pipeFrom:'B_Q4',
+    skipIf: (a)=> (a.B_Q4||[]).includes('f')
+    },
 
   { id:'B_Q5', section:'Section B', sectionDesc:'The mine planning market', type:'multi',
     text:'Q5. Which mine planning software are you familiar with?', sub:'(Select all relevant)',
@@ -612,20 +585,14 @@ const QUESTIONS = [
       {v:'d', t:'Performance with large or complex datasets'},
       {v:'e', t:'Rigid licensing models and rising costs'},
       {v:'f', t:'Slow pace of product development'},
-      {v:'g', t:'No significant frustrations'}
+      {v:'g', t:'No significant frustrations', exclusive:true}
     ]},
 
   { id:'B_Q6a', section:'Section B', sectionDesc:'The mine planning market', type:'single',
     text:'Q6a. What is your GREATEST frustration with the planning solutions themselves?', sub:'(Select one)',
-    skipIf: (a)=> (a.B_Q6||[]).includes('g'),
-    options:[
-      {v:'a', t:'Poor interoperability with other systems'},
-      {v:'b', t:'Outdated user experience and steep learning curve'},
-      {v:'c', t:'AI and optimisation capability lagging behind the marketing'},
-      {v:'d', t:'Performance with large or complex datasets'},
-      {v:'e', t:'Rigid licensing models and rising costs'},
-      {v:'f', t:'Slow pace of product development'}
-    ]},
+    pipeFrom:'B_Q6',
+    skipIf: (a)=> (a.B_Q6||[]).includes('g')
+    },
 
   { id:'B_Q7', section:'Section B', sectionDesc:'The mine planning market', type:'multi',
     text:"Q7. Considering the broader mine planning landscape (not just your supplier), what material frustrations are prevalent within providers' service, support and communication?", sub:'(Select all relevant)',
@@ -636,20 +603,14 @@ const QUESTIONS = [
       {v:'d', t:'Poor training and onboarding'},
       {v:'e', t:'Poor communication of product roadmap and changes'},
       {v:'f', t:'Inflexible commercial terms and account management'},
-      {v:'g', t:'No significant frustrations'}
+      {v:'g', t:'No significant frustrations', exclusive:true}
     ]},
 
   { id:'B_Q7a', section:'Section B', sectionDesc:'The mine planning market', type:'single',
     text:"Q7a. What is your GREATEST frustration with providers' service, support and communication?", sub:'(Select one)',
-    skipIf: (a)=> (a.B_Q7||[]).includes('g'),
-    options:[
-      {v:'a', t:'Slow or low-quality technical support'},
-      {v:'b', t:'Weak after-sales engagement — little contact once the licence is sold'},
-      {v:'c', t:'Support staff who lack real mining and planning expertise'},
-      {v:'d', t:'Poor training and onboarding'},
-      {v:'e', t:'Poor communication of product roadmap and changes'},
-      {v:'f', t:'Inflexible commercial terms and account management'}
-    ]},
+    pipeFrom:'B_Q7',
+    skipIf: (a)=> (a.B_Q7||[]).includes('g')
+    },
 
   { id:'B_Q8', section:'Section B', sectionDesc:'The mine planning market', type:'single',
     text:'Q8. Who has the greatest influence over decisions to purchase mine planning technology and services in your organisation?', sub:'(Select one)',
@@ -706,6 +667,13 @@ function pipedOptions(sourceId){
     const o = srcQ.options.find(o=>o.v===v);
     return o;
   }).filter(Boolean);
+}
+
+// Look up the verbatim option text for a stored value, respecting pipeFrom questions.
+function labelForValue(q, val){
+  const opts = q.pipeFrom ? pipedOptions(q.pipeFrom) : q.options;
+  const o = (opts||[]).find(o=>o.v===val);
+  return o ? o.t : val;
 }
 
 /* ======================= RENDER ======================= */
@@ -808,8 +776,24 @@ function selectOption(qid, val){
   if (q.type==='multi'){
     if(!answers[qid]) answers[qid]=[];
     const arr = answers[qid];
+    const opt = q.options.find(o=>o.v===val);
     const i = arr.indexOf(val);
-    if (i>-1) arr.splice(i,1); else arr.push(val);
+    if (i>-1){
+      arr.splice(i,1);
+    } else if (opt && opt.exclusive){
+      // selecting an exclusive ("none"-type) option clears every other selection
+      arr.length = 0;
+      arr.push(val);
+    } else {
+      // selecting a normal option clears any exclusive option currently selected
+      q.options.forEach(o=>{
+        if (o.exclusive){
+          const ei = arr.indexOf(o.v);
+          if (ei>-1) arr.splice(ei,1);
+        }
+      });
+      arr.push(val);
+    }
   } else {
     answers[qid]=val;
   }
@@ -887,11 +871,19 @@ function checkDisqualifiers(q){
 async function checkQuota(q){
   if (q.type!=='single') return null;
   const o = (q.options||[]).find(o=>o.v===answers[q.id]);
-  if (o && o.quotaCheck==='under5'){
+  if (!o || !o.quotaCheck) return null;
+  if (o.quotaCheck==='under5'){
     try{
       const res = await fetch(SCRIPT_URL+'?action=checkUnder5');
       const data = await res.json();
       if (data.quotaFull) return 'Over quota: <5 years experience (cap reached)';
+    }catch(e){ /* fail open if backend unreachable */ }
+  }
+  if (o.quotaCheck==='region'){
+    try{
+      const res = await fetch(SCRIPT_URL+'?action=checkRegion&region='+encodeURIComponent(o.v));
+      const data = await res.json();
+      if (data.quotaFull) return 'Over quota: region '+o.t+' (cap reached)';
     }catch(e){ /* fail open if backend unreachable */ }
   }
   return null;
@@ -963,12 +955,12 @@ function flattenAnswersForSubmit(){
   QUESTIONS.forEach(q=>{
     if (!(q.id in answers)) return;
     if (q.type==='multi'){
-      out[q.id] = answers[q.id].join('|');
+      out[q.id] = answers[q.id].map(v=>labelForValue(q,v)).join('|');
       if (otherText[q.id]) out[q.id+'_Other'] = otherText[q.id];
     } else if (q.type==='grid'){
       out[q.id+'_Grid'] = answers[q.id];
     } else {
-      out[q.id] = answers[q.id];
+      out[q.id] = labelForValue(q, answers[q.id]);
       if (otherText[q.id]) out[q.id+'_Other'] = otherText[q.id];
     }
   });
